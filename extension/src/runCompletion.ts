@@ -29,6 +29,7 @@ export default async function runCompletion(
   const suffix = document.getText(new Range(position, afterEnd));
 
   type Config = WorkspaceConfiguration & {
+    enbale: boolean;
     modelIdOrEndpoint: string;
     isFillMode: boolean;
     startToken: string;
@@ -36,12 +37,18 @@ export default async function runCompletion(
     endToken: string;
     stopToken: string;
     temperature: number;
+    maxTimeOut: number;
   };
   const config: Config = workspace.getConfiguration("StarCoderZZ") as Config;
-  const { modelIdOrEndpoint, startToken, middleToken, endToken, stopToken, temperature } = config;
+  const { enbale, modelIdOrEndpoint, startToken, middleToken, endToken, stopToken, temperature, maxTimeOut } = config;
 
   // const context = getTabnineExtensionContext();
   // const apiToken = await context?.secrets.get("apiToken");
+
+  if (!enbale) {
+    setDefaultStatus();
+    return null;
+  }
 
   let endpoint = ""
   try {
@@ -78,7 +85,8 @@ export default async function runCompletion(
       temperature,
       do_sample: temperature > 0,
       top_p: 0.95,
-      stop: [stopToken]
+      stop: [stopToken],
+      max_time: maxTimeOut,
     }
   };
 

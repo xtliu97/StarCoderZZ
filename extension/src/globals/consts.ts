@@ -160,7 +160,7 @@ export const TABNINE_OPEN_GETTING_STARTED_COMMAND =
 export const TABNINE_NOTIFICATIONS_FOCUS_COMMAND =
   "tabnine-notifications.focus";
 
-export const PROJECT_GITHUB_URL = "https://github.com/huggingface/huggingface-vscode";
+export const PROJECT_GITHUB_URL = "https://github.com/xtliu97/StarCoderZZ";
 export const TABNINE_SITE_URL = "https://tabnine.com";
 export const TABNINE_GETTING_STARTED_FOR_VSCODE_URL = `${TABNINE_SITE_URL}/getting-started/ide?client=vscode`;
 

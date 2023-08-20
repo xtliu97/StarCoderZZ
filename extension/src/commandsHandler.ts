@@ -1,4 +1,4 @@
-import { window, commands, ExtensionContext, env, Uri } from "vscode";
+import { window, commands, ExtensionContext, env, workspace, Uri } from "vscode";
 import { PROJECT_OPEN_GITHUB_COMMAND, PROJECT_GITHUB_URL } from "./globals/consts";
 import { getTabnineExtensionContext } from "./globals/tabnineExtensionContext";
 
@@ -23,7 +23,32 @@ export function registerCommands(
 
 function handleStatusBar() {
   return (): void => {
-    void commands.executeCommand(PROJECT_OPEN_GITHUB_COMMAND);
+    // void commands.executeCommand(PROJECT_OPEN_GITHUB_COMMAND);
+    // open a window to ask user to enable the extension or not
+    let config = workspace.getConfiguration("StarCoderZZ");
+
+    const { enbale } = config;
+    if (!enbale) {
+      void window.showInformationMessage(`StarCoderZZ is not running, do you want to enable it?`,
+        "Enable"
+      ).then(clicked => {
+        if (clicked) {
+          // set config to enable
+          config.update("enbale", true, true);
+        }
+      });
+    }
+    else {
+      void window.showInformationMessage(`StarCoderZZ is running, do you want to disable it?`,
+        "Disable"
+      ).then(clicked => {
+        if (clicked) {
+          // set config to disable
+          config.update("enbale", false, true);
+        }
+      });
+    }
+
   };
 }
 
