@@ -14,7 +14,7 @@ app.add_middleware(CORSMiddleware)
 generator: StarCoderGenerator = ...
 
 
-@app.post("/api/chat/completion")
+@app.post("/code/completion")
 async def code_completion(request: Request):
     try:
         json_request = await request.json()
@@ -33,6 +33,7 @@ async def code_completion(request: Request):
             error_message=None
         )
     except Exception as e:
+        print(e)
         return ChatResponse(
             generated_text="",
             api_response_time=None,

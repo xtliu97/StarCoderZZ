@@ -1,0 +1,308 @@
+{
+  "publisher": "xtliu97",
+  "name": "starcoderzz",
+  "version": "0.0.1",
+  "displayName": "StarCoderZZ",
+  "description": "Vscode extension for StarCoderZZ",
+  "icon": "small_logo.png",
+  "author": "Mishig Davaadorj <mishig@hf.co> (https://hf.co/)",
+  "license": "",
+  "galleryBanner": {
+    "color": "#100f11",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/github/stars/xtliu97/StarCoderZZ?style=social",
+      "description": "StarCoderZZ Vscode extension on Github",
+      "href": "https://github.com/xtliu97/StarCoderZZ"
+    }
+  ],
+  "homepage": "https://github.com/xtliu97/StarCoderZZ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xtliu97/StarCoderZZ"
+  },
+  "bugs": {
+    "url": "https://github.com/xtliu97/StarCoderZZ/issues",
+    "email": "xtliu1112@outlook.com"
+  },
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "javascript",
+    "python",
+    "typescript",
+    "php",
+    "autocomplete",
+    "ruby",
+    "java",
+    "go",
+    "golang",
+    "bash",
+    "kotlin",
+    "html",
+    "css",
+    "ocaml",
+    "perl",
+    "rust",
+    "julia",
+    "lua",
+    "haskell",
+    "c",
+    "cpp",
+    "c++",
+    "csharp",
+    "c#",
+    "react",
+    "swift",
+    "objective-c",
+    "objectivec",
+    "ai",
+    "method completion",
+    "intellicode",
+    "intellisense",
+    "snippets",
+    "kite",
+    "nodejs",
+    "node",
+    "node.js",
+    "jupyter"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension",
+  "scripts": {
+    "analyze:bundle": "webpack --env analyzeBundle",
+    "vscode:prepublish": "yarn --frozen-lockfile && yarn clear-out && webpack --mode production",
+    "compile": "webpack --mode development --watch",
+    "build": "webpack --mode development",
+    "test:copyassets": "ncp ./src/test/fixture ./out/test/fixture/",
+    "prettier": "prettier --write src/",
+    "prettier:check": "prettier --check src/",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "test:prepare": "yarn clear-out && tsc && yarn test:copyassets",
+    "test": "yarn test:prepare && node ./out/test/runTest.js",
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish",
+    "ovsx:publish": "ovsx publish",
+    "teamcity:test": "tsc && node ./out/test/runTest.js",
+    "clear-out": "rimraf ./out"
+  },
+  "peerDependencies": {
+    "vscode": "^1.1.37"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/debounce": "^1.2.1",
+    "@types/diff": "^5.0.2",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.2",
+    "@types/mock-fs": "^4.13.0",
+    "@types/ncp": "^2.0.4",
+    "@types/node": "^12.0.10",
+    "@types/node-fetch": "^2.6.3",
+    "@types/rimraf": "^3.0.0",
+    "@types/semver": "^7.3.4",
+    "@types/sinon": "^9.0.11",
+    "@types/tmp": "^0.2.0",
+    "@types/vscode": "^1.50.0",
+    "@types/yauzl": "^2.9.1",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "assert": "^2.0.0",
+    "chai": "^4.2.0",
+    "chai-shallow-deep-equal": "^1.4.6",
+    "deep-object-diff": "^1.1.0",
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
+    "glob": "^7.1.6",
+    "husky": "^5.1.2",
+    "lint-staged": "^13.0.4",
+    "mocha": "^10.1.0",
+    "mocha-teamcity-reporter": "^3.0.0",
+    "mock-fs": "^4.13.0",
+    "ncp": "^2.0.0",
+    "ovsx": "^0.5.2",
+    "prettier": "2.2.1",
+    "rimraf": "^3.0.2",
+    "sinon": "^10.0.0",
+    "terser-webpack-plugin": "^5.3.6",
+    "ts-loader": "^9.4.1",
+    "ts-mockito": "^2.6.1",
+    "typescript": "^4.2.2",
+    "vsce": "^1.93.0",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.75.0",
+    "webpack-bundle-analyzer": "^4.7.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "debounce": "^1.2.1",
+    "diff": "^5.0.0",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "extract-zip": "^2.0.1",
+    "https-proxy-agent": "^5.0.0",
+    "node-fetch": "^3.3.0",
+    "semver": "^7.3.2",
+    "systeminformation": "^5.6.10",
+    "tmp": "^0.2.1",
+    "vscode-extension-telemetry": "^0.1.7"
+  },
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "StarCoderZZ::setApiToken",
+        "title": "StarCoderZZ: Set API token"
+      },
+      {
+        "command": "tabnine.attribution",
+        "title": "StarCoderZZ: Show Code Attribution"
+      },
+      {
+        "command": "StarCoderZZ::openGithub",
+        "title": "StarCoderZZ: Open project GitHub"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "StarCoderZZ",
+          "title": "StarCoderZZ",
+          "icon": "logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "StarCoderZZ": [
+        {
+          "type": "webview",
+          "id": "StarCoderZZ.chat",
+          "name": "StarCoderZZ"
+        }
+      ]
+    },
+    "configuration": [
+      {
+        "title": "StarCoderZZ",
+        "properties": {
+          "StarCoderZZ.modelIdOrEndpoint": {
+            "type": "string",
+            "default": "http://localhost:8000",
+            "description": "The url of API you want to use. If you have a local server, you can use http://localhost:8000"
+          },
+          "StarCoderZZ.isFillMode": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to send to inference server: codes that are on top of cursor only (isFillMode=false) OR codes that are both above & below the cursor (isFillMode=true)"
+          },
+          "StarCoderZZ.startToken": {
+            "type": "string",
+            "default": "<fim_prefix>",
+            "description": "String that is sent to server is in format: {startToken}{code above cursor}{middleToken}{code below cursor if isFillMode=true}{endToken}. Leave startToken, middleToken, or endToken empty if there is no special token for those placements."
+          },
+          "StarCoderZZ.middleToken": {
+            "type": "string",
+            "default": "<fim_middle>",
+            "description": "String that is sent to server is in format: {startToken}{code above cursor}{middleToken}{code below cursor if isFillMode=true}{endToken}. Leave startToken, middleToken, or endToken empty if there is no special token for those placements."
+          },
+          "StarCoderZZ.endToken": {
+            "type": "string",
+            "default": "<fim_suffix>",
+            "description": "String that is sent to server is in format: {startToken}{code above cursor}{middleToken}{code below cursor if isFillMode=true}{endToken}. Leave startToken, middleToken, or endToken empty if there is no special token for those placements."
+          },
+          "StarCoderZZ.temperature": {
+            "type": "float",
+            "default": 0.2,
+            "description": "Sampling temperature"
+          },
+          "StarCoderZZ.stopToken": {
+            "type": "string",
+            "default": "<|endoftext|>",
+            "description": "(Optional) Stop token"
+          },
+          "StarCoderZZ.attributionWindowSize": {
+            "type": "integer",
+            "default": 250,
+            "description": "Number of characters to scan for code attribution"
+          }
+        }
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "tab",
+        "command": "tabnine.accept-inline-suggestion",
+        "when": "tabnine.snippet-suggestion:enabled && tabnine.in-inline-suggestions || tabnine.inline-suggestion:enabled && tabnine.in-inline-suggestions"
+      },
+      {
+        "key": "tab",
+        "command": "tabnine.tab-override",
+        "when": "tabnine.tab-override && suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus"
+      },
+      {
+        "key": "tab",
+        "command": "editor.action.inlineSuggest.commit",
+        "when": "tabnine.tab-override && inlineSuggestionVisible && !editorTabMovesFocus"
+      },
+      {
+        "key": "cmd+shift+a",
+        "command": "tabnine.attribution"
+      },
+      {
+        "key": "ctrl+z",
+        "mac": "cmd+z",
+        "command": "tabnine.escape-inline-suggestion",
+        "when": "tabnine.snippet-suggestion:enabled && tabnine.in-inline-suggestions || tabnine.inline-suggestion:enabled && tabnine.in-inline-suggestions"
+      },
+      {
+        "key": "alt+]",
+        "command": "tabnine.next-inline-suggestion",
+        "when": "tabnine.snippet-suggestion:enabled && tabnine.in-inline-suggestions || tabnine.inline-suggestion:enabled && tabnine.in-inline-suggestions"
+      },
+      {
+        "key": "alt+[",
+        "command": "tabnine.prev-inline-suggestion",
+        "when": "tabnine.snippet-suggestion:enabled && tabnine.in-inline-suggestions || tabnine.inline-suggestion:enabled && tabnine.in-inline-suggestions"
+      },
+      {
+        "key": "alt+.",
+        "mac": "ctrl+.",
+        "command": "tabnine.snippet-suggestion",
+        "when": "tabnine.snippet-suggestion:enabled"
+      }
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,css,md}": "prettier --write src/"
+  },
+  "__metadata": {
+    "id": "75da638c-c45a-44ea-aa3b-8570a3559810",
+    "publisherDisplayName": "TabNine",
+    "publisherId": "1924b661-7c19-45d9-9800-edeb32848fd7",
+    "isPreReleaseVersion": false
+  }
+}
