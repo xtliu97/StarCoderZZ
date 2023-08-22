@@ -252,6 +252,11 @@
             "type": "integer",
             "default": 250,
             "description": "Number of characters to scan for code attribution"
+          },
+          "StarCoderZZ.maxNewTokens": {
+            "type": "integer",
+            "default": 120,
+            "description": "Maximum number of new tokens to append to the code"
           }
         }
       }

@@ -38,9 +38,10 @@ export default async function runCompletion(
     stopToken: string;
     temperature: number;
     maxTimeOut: number;
+    maxNewTokens: number;
   };
   const config: Config = workspace.getConfiguration("StarCoderZZ") as Config;
-  const { enbale, modelIdOrEndpoint, startToken, middleToken, endToken, stopToken, temperature, maxTimeOut } = config;
+  const { enbale, modelIdOrEndpoint, startToken, middleToken, endToken, stopToken, temperature, maxTimeOut, maxNewTokens } = config;
 
   // const context = getTabnineExtensionContext();
   // const apiToken = await context?.secrets.get("apiToken");
@@ -81,7 +82,7 @@ export default async function runCompletion(
   const data = {
     inputs,
     parameters: {
-      max_new_tokens: 120,
+      max_new_tokens: maxNewTokens,
       temperature,
       do_sample: temperature > 0,
       top_p: 0.95,
