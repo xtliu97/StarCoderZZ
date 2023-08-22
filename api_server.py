@@ -1,4 +1,4 @@
-import time
+import logging
 
 import uvicorn
 from argparse import ArgumentParser
@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from msg_defs import ChatRequest, ChatResponse
 from models import StarCoderGenerator
 
+logging.basicConfig(level=logging.INFO)
+
 app = FastAPI()
 app.add_middleware(CORSMiddleware)
 
@@ -15,31 +17,20 @@ generator: StarCoderGenerator = ...
 
 
 @app.post("/code/completion")
-async def code_completion(request: Request):
-    try:
-        json_request = await request.json()
-        chat_request = ChatRequest(**json_request)
+async def code_completion(request: Request) -> ChatResponse:
 
-        tic = time.time()
-        generated_text = generator.generate(
-            chat_request
-        )
-        toc = time.time()
+    json_request = await request.json()
+    chat_request = ChatRequest(**json_request)
+    logging.info(f"Received request:\n {chat_request}")
 
-        return ChatResponse(
-            generated_text=generated_text,
-            api_response_time=round(toc - tic, 2),
-            status_code=200,
-            error_message=None
-        )
-    except Exception as e:
-        print(e)
-        return ChatResponse(
-            generated_text="",
-            api_response_time=None,
-            status_code=500,
-            error_message=e.__repr__()
-        )
+    chat_response = generator.get_response(chat_request)
+
+    if chat_response.status_code == 200:
+        logging.info(f"Generated text:\n {chat_response.generated_text}")
+    elif chat_response.status_code == 500:
+        logging.error(f"Error message:\n {chat_response.error_message}")
+
+    return chat_response
 
 
 def main():

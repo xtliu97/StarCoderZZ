@@ -81,7 +81,7 @@ export default async function runCompletion(
   const data = {
     inputs,
     parameters: {
-      max_new_tokens: 60,
+      max_new_tokens: 120,
       temperature,
       do_sample: temperature > 0,
       top_p: 0.95,
