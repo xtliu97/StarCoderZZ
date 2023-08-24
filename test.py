@@ -20,15 +20,32 @@ class TestGenerator(unittest.TestCase):
     #     response = get_response(API_URL, demo_request)
     #     print(response.generated_text)
 
-    def test_llama_cpp_api(self):
-        API_URL = "http://localhost:8080/completion"
+    # def test_llama_cpp_api(self):
+    #     API_URL = "http://localhost:8000/code/completion"
+    #     import requests
+    #     input = {
+    #         "inputs": "def quicksort(arr):",
+    #         "parameters": {
+    #             "temperature": 1.0,
+    #             "max_new_tokens": 200,
+    #         }
+    #     }
+    #     response = requests.post(API_URL, json=input)
+    #     print(response.json()['generated_text'])
+
+    def test_chat_api(self):
+        API_URL = "http://localhost:8000/chat/completion"
         import requests
         input = {
-            "prompt": "def quicksort(arr):",
-            "n_predict": 100,
+            "inputs": "Write a function to sort a list of integers in ascending order.",
+            "parameters": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_new_tokens": 2000,
+            }
         }
         response = requests.post(API_URL, json=input)
-        print(response.json()['content'])
+        print(response.json()['generated_text'])
 
 
 if __name__ == '__main__':

@@ -2,8 +2,21 @@ import os
 import signal
 
 from msg_defs import ChatRequest, ChatResponse
+from chat_prompt import CHAT_PROMPT
 
-from transformers import AutoModelForCausalLM, PreTrainedModel, AutoTokenizer
+from transformers import AutoModelForCausalLM, PreTrainedModel, AutoTokenizer, StoppingCriteriaList, StoppingCriteria
+
+
+class KeywordsStoppingCriteria(StoppingCriteria):
+    def __init__(self, keywords):
+        self.keywords = keywords
+        print(keywords)
+
+    def __call__(self, input_ids, scores, **kwargs):
+        for keyword in self.keywords:
+            if input_ids[0][-1] == keyword:
+                return True
+        return False
 
 
 def exception_handler(func):
@@ -75,3 +88,53 @@ class StarCoderGenerator:
             status_code=200,
             error_message=None
         )
+
+    @exception_handler
+    def get_chat_response(self, request: ChatRequest) -> ChatResponse:
+        inputs_with_prompt = CHAT_PROMPT.strip() + "\n\nHuman:" + \
+            request.inputs + "\n\nAssistant:"
+        inputs = self.tokenizer.encode(
+            inputs_with_prompt, return_tensors="pt").to(self.device)
+
+        parameters = request.parameters
+        max_new_tokens = 2000  # bigger for chat, parameters.max_new_tokens
+        temperature = parameters.temperature
+        top_k = parameters.top_k
+        top_p = parameters.top_p
+        max_time = parameters.max_time if parameters.max_time != None else 1000
+        truncate = 8000
+        repeat_penalty = 1.2
+        stop_criteria_keywords = ["-----",  "Assistant:"]
+        stop_criteria = KeywordsStoppingCriteria(
+            [self.tokenizer.encode(keyword)[0]
+             for keyword in stop_criteria_keywords]
+        )
+        generated_ids = self.model.generate(
+            inputs,
+            do_sample=True,
+            min_length=10,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            top_k=top_k,
+            top_p=top_p,
+            # max_time=max_time,
+            stopping_criteria=StoppingCriteriaList([stop_criteria]),
+            repetition_penalty=repeat_penalty,
+            pad_token_id=0,
+
+        )
+        target_ids = generated_ids[0][len(inputs[0]):]
+        print(target_ids)
+        generated_text = self.tokenizer.decode(
+            target_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False, truncate_text=True)
+
+        return ChatResponse(
+            generated_text=generated_text,
+            api_response_time=None,
+            status_code=200,
+            error_message=None
+        )
+
+    @exception_handler
+    def get_response_stream(self, request: ChatRequest) -> ChatResponse:
+        pass

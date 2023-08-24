@@ -33,6 +33,27 @@ async def code_completion(request: Request) -> ChatResponse:
     return chat_response
 
 
+@app.post("/chat/completion")
+async def chat_completion(request: Request) -> ChatResponse:
+    json_request = await request.json()
+    chat_request = ChatRequest(**json_request)
+    logging.info(f"Received request:\n {chat_request}")
+
+    chat_response = generator.get_chat_response(chat_request)
+
+    if chat_response.status_code == 200:
+        logging.info(f"Generated text:\n {chat_response.generated_text}")
+    elif chat_response.status_code == 500:
+        logging.error(f"Error message:\n {chat_response.error_message}")
+
+    return chat_response
+
+
+@app.post("/code/completion/stream")
+async def code_completion_stream(request: Request) -> ChatResponse:
+    pass
+
+
 def main():
     arg_parser = ArgumentParser()
     arg_parser.add_argument("--host", type=str, default="localhost")
