@@ -2,82 +2,85 @@ import * as vscode from "vscode";
 import { registerCommands } from "./commandsHandler";
 import tabnineExtensionProperties from "./globals/tabnineExtensionProperties";
 import {
-  COMPLETION_IMPORTS,
-  handleImports,
-  HANDLE_IMPORTS,
-  getSelectionHandler,
+	COMPLETION_IMPORTS,
+	handleImports,
+	HANDLE_IMPORTS,
+	getSelectionHandler,
 } from "./selectionHandler";
 import { registerStatusBar, setDefaultStatus } from "./statusBar/statusBar";
 import { setTabnineExtensionContext } from "./globals/tabnineExtensionContext";
 import installAutocomplete from "./autocompleteInstaller";
 import handlePluginInstalled from "./handlePluginInstalled";
+// import BackendManager from "./backend";
 
 export async function activate(
-  context: vscode.ExtensionContext
+	context: vscode.ExtensionContext
 ): Promise<void> {
-  void initStartup(context);
-  handleSelection(context);
+	void initStartup(context);
+	// const backendManager = new BackendManager();
+	// backendManager.startBackend();
+	handleSelection(context);
 
-  registerStatusBar(context);
+	registerStatusBar(context);
 
-  // Do not await on this function as we do not want VSCode to wait for it to finish
-  // before considering TabNine ready to operate.
-  void backgroundInit(context);
+	// Do not await on this function as we do not want VSCode to wait for it to finish
+	// before considering TabNine ready to operate.
+	void backgroundInit(context);
 
-  if (context.extensionMode !== vscode.ExtensionMode.Test) {
-    handlePluginInstalled(context);
-  }
+	if (context.extensionMode !== vscode.ExtensionMode.Test) {
+		handlePluginInstalled(context);
+	}
 
-  const provider = new GPTProvider(context.extensionUri);
-  console.log(context.extensionUri);
-  // Put configuration settings into the provider
+	// const provider = new GPTProvider(context.extensionUri);
+	// console.log(context.extensionUri);
+	// Put configuration settings into the provider
 
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      GPTProvider.viewType, provider, {
-        webviewOptions: {
-          retainContextWhenHidden: true,
-        },
-      }
-    )
-  );
+	// context.subscriptions.push(
+	// 	vscode.window.registerWebviewViewProvider(
+	// 		GPTProvider.viewType, provider, {
+	// 		webviewOptions: {
+	// 			retainContextWhenHidden: true,
+	// 		},
+	// 	}
+	// 	)
+	// );
 
-  return Promise.resolve();
+	return Promise.resolve();
 }
 
 function initStartup(context: vscode.ExtensionContext): void {
-  setTabnineExtensionContext(context);
+	setTabnineExtensionContext(context);
 }
 
 async function backgroundInit(context: vscode.ExtensionContext) {
-  setDefaultStatus();
-  void registerCommands(context);
+	setDefaultStatus();
+	void registerCommands(context);
 
-  await installAutocomplete(context);
+	await installAutocomplete(context);
 }
 
-export async function deactivate(){
+export async function deactivate() {
 }
 
 function handleSelection(context: vscode.ExtensionContext) {
-  if (tabnineExtensionProperties.isTabNineAutoImportEnabled) {
-    context.subscriptions.push(
-      vscode.commands.registerTextEditorCommand(
-        COMPLETION_IMPORTS,
-        getSelectionHandler(context)
-      ),
-      vscode.commands.registerTextEditorCommand(HANDLE_IMPORTS, handleImports)
-    );
-  }
+	if (tabnineExtensionProperties.isTabNineAutoImportEnabled) {
+		context.subscriptions.push(
+			vscode.commands.registerTextEditorCommand(
+				COMPLETION_IMPORTS,
+				getSelectionHandler(context)
+			),
+			vscode.commands.registerTextEditorCommand(HANDLE_IMPORTS, handleImports)
+		);
+	}
 }
 
 
 class GPTProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'StarCoderZZ.chat';
+	public static readonly viewType = 'StarCoderZZ.chat';
 
 	private _view?: vscode.WebviewView;
 
-  	public selectedInsideCodeblock = false;
+	public selectedInsideCodeblock = false;
 
 	public pasteOnClick = true;
 
@@ -85,12 +88,12 @@ class GPTProvider implements vscode.WebviewViewProvider {
 
 	public timeoutLength = 60;
 
-  	constructor(private readonly extensionUri: vscode.Uri) {
-		
+	constructor(private readonly extensionUri: vscode.Uri) {
+
 	}
 
-  
-    private getHtmlForWebview(webview: vscode.Webview) {
+
+	private getHtmlForWebview(webview: vscode.Webview) {
 
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'media', 'main.js'));
 		const microlightUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'media', 'scripts', 'microlight.min.js'));
@@ -123,9 +126,9 @@ class GPTProvider implements vscode.WebviewViewProvider {
 
 	public revive(panel: vscode.WebviewView) {
 		this._view = panel;
-	  }
+	}
 
-    public resolveWebviewView(
+	public resolveWebviewView(
 		webviewView: vscode.WebviewView,
 		context: vscode.WebviewViewResolveContext,
 		_token: vscode.CancellationToken,
@@ -145,9 +148,9 @@ class GPTProvider implements vscode.WebviewViewProvider {
 		// set the HTML for the webview
 		webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
 
-		
+
 	}
 
 
-  
+
 }

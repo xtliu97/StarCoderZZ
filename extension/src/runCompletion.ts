@@ -7,11 +7,13 @@ import { CHAR_LIMIT, FULL_BRAND_REPRESENTATION } from "./globals/consts";
 import languages from "./globals/languages";
 import { setDefaultStatus, setLoadingStatus } from "./statusBar/statusBar";
 import { logInput, logOutput } from "./outputChannels";
-import { getTabnineExtensionContext } from "./globals/tabnineExtensionContext";
+// import { getTabnineExtensionContext } from "./globals/tabnineExtensionContext";
 
 export type CompletionType = "normal" | "snippet";
 
-let didShowTokenWarning = false;
+let firstTimeStarted = true;
+
+const codeCompletionPostfix = "/code/completion";
 
 export default async function runCompletion(
   document: TextDocument,
@@ -51,30 +53,24 @@ export default async function runCompletion(
     return null;
   }
 
-  let endpoint = ""
-  try {
-    new URL(modelIdOrEndpoint);
-    endpoint = modelIdOrEndpoint;
-  } catch (e) {
-    endpoint = `http://localhost:8000`;
-    // if user hasn't supplied API Token yet, ask user to supply one
-    // if (!apiToken && !didShowTokenWarning) {
-    if (!didShowTokenWarning) {
-      didShowTokenWarning = true;
-      // void window.showInformationMessage(`In order to use "${modelIdOrEndpoint}" through Hugging Face API Inference, you'd need Hugging Face API Token`,
-      //   "Get your token"
-      // ).
-      void window.showInformationMessage(`You are running StarCoderZZ for the first time, please set your API Endpoint`,
-        "Set Endpoint"
-      ).then(clicked => {
-        if (clicked) {
-          // open setting of extension config modelIdOrEndpoint 
-          vscode.commands.executeCommand('workbench.action.openSettings', 'StarCoderZZ.modelIdOrEndpoint');
-          // void env.openExternal(Uri.parse("https://github.com/huggingface/huggingface-vscode#hf-api-token"));
-        }
-      });
-    }
+  let endpoint = modelIdOrEndpoint;
+
+  if (firstTimeStarted) {
+    firstTimeStarted = false;
+    // void window.showInformationMessage(`In order to use "${modelIdOrEndpoint}" through Hugging Face API Inference, you'd need Hugging Face API Token`,
+    //   "Get your token"
+    // ).
+    void window.showInformationMessage(`You are running StarCoderZZ for the first time, the current endpoint is set to default value: ${endpoint}, you can change it in the settings.`,
+      "Set Endpoint"
+    ).then(clicked => {
+      if (clicked) {
+        // open setting of extension config modelIdOrEndpoint 
+        vscode.commands.executeCommand('workbench.action.openSettings', 'StarCoderZZ.modelIdOrEndpoint');
+        // void env.openExternal(Uri.parse("https://github.com/huggingface/huggingface-vscode#hf-api-token"));
+      }
+    });
   }
+
 
   // use FIM (fill-in-middle) mode if suffix is available
   const inputs = suffix.trim() ? `${startToken}${prefix}${endToken}${suffix}${middleToken}` : prefix;
@@ -100,8 +96,8 @@ export default async function runCompletion(
   // if (apiToken) {
   //   headers.Authorization = `Bearer ${apiToken}`;
   // }
-  let code_completion_endpoint = endpoint + "/code/completion";
-  const res = await fetch(code_completion_endpoint, {
+  const codeCompletionEndpoint = `${endpoint}${codeCompletionPostfix}`;
+  const res = await fetch(codeCompletionEndpoint, {
     method: "POST",
     headers,
     body: JSON.stringify(data),

@@ -183,23 +183,9 @@
       }
     ],
     "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "StarCoderZZ",
-          "title": "StarCoderZZ",
-          "icon": "logo.svg"
-        }
-      ]
+      "activitybar": []
     },
-    "views": {
-      "StarCoderZZ": [
-        {
-          "type": "webview",
-          "id": "StarCoderZZ.chat",
-          "name": "StarCoderZZ"
-        }
-      ]
-    },
+    "views": {},
     "configuration": [
       {
         "title": "StarCoderZZ",
@@ -211,6 +197,7 @@
           },
           "StarCoderZZ.modelIdOrEndpoint": {
             "type": "string",
+            "default": "http://localhost:8000",
             "description": "The url of API you want to use. If you have a local server, you can use http://localhost:8000"
           },
           "StarCoderZZ.isFillMode": {
