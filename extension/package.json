@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "displayName": "StarCoderZZ",
   "description": "Vscode extension for StarCoderZZ",
-  "icon": "small_logo.png",
+  "icon": "logo.png",
   "author": "Mishig Davaadorj <mishig@hf.co> (https://hf.co/)",
   "license": "",
   "galleryBanner": {
@@ -197,8 +197,7 @@
           },
           "StarCoderZZ.modelIdOrEndpoint": {
             "type": "string",
-            "default": "http://localhost:8000",
-            "description": "The url of API you want to use. If you have a local server, you can use http://localhost:8000"
+            "description": "The url of API the server is running on."
           },
           "StarCoderZZ.isFillMode": {
             "type": "boolean",

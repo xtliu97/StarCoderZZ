@@ -53,22 +53,31 @@ export default async function runCompletion(
     return null;
   }
 
-  let endpoint = modelIdOrEndpoint;
+  let endpoint = '';
+  try {
+    new URL(modelIdOrEndpoint);
+    endpoint = modelIdOrEndpoint;
+  }
+  catch (e) {
+    if (firstTimeStarted) {
+      firstTimeStarted = false;
 
-  if (firstTimeStarted) {
-    firstTimeStarted = false;
-    // void window.showInformationMessage(`In order to use "${modelIdOrEndpoint}" through Hugging Face API Inference, you'd need Hugging Face API Token`,
-    //   "Get your token"
-    // ).
-    void window.showInformationMessage(`You are running StarCoderZZ for the first time, the current endpoint is set to default value: ${endpoint}, you can change it in the settings.`,
-      "Set Endpoint"
-    ).then(clicked => {
-      if (clicked) {
-        // open setting of extension config modelIdOrEndpoint 
-        vscode.commands.executeCommand('workbench.action.openSettings', 'StarCoderZZ.modelIdOrEndpoint');
-        // void env.openExternal(Uri.parse("https://github.com/huggingface/huggingface-vscode#hf-api-token"));
-      }
-    });
+      endpoint = "http://localhost:8000";
+      // set modelIdOrEndpoint to default value
+      config.update("modelIdOrEndpoint", endpoint, true);
+      // void window.showInformationMessage(`In order to use "${modelIdOrEndpoint}" through Hugging Face API Inference, you'd need Hugging Face API Token`,
+      //   "Get your token"
+      // ).
+      void window.showInformationMessage(`You are running StarCoderZZ with local endpoint, the current endpoint is set to default value: ${endpoint}, you can change it in the settings.`,
+        "Set Endpoint"
+      ).then(clicked => {
+        if (clicked) {
+          // open setting of extension config modelIdOrEndpoint 
+          vscode.commands.executeCommand('workbench.action.openSettings', 'StarCoderZZ.modelIdOrEndpoint');
+          // void env.openExternal(Uri.parse("https://github.com/huggingface/huggingface-vscode#hf-api-token"));
+        }
+      });
+    }
   }
 
 
