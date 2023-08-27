@@ -6,11 +6,11 @@ from pydantic import BaseModel
 
 
 class ModelParameter(BaseModel):
-    temperature: float = 1.0
+    temperature: float = 0.1
     top_k: int | None = None
     top_p: float | None = None
     max_new_tokens: int | None = 300
-    max_time: float | None = None
+    max_time: int | None = None
 
 
 class ChatRequest(BaseModel):
