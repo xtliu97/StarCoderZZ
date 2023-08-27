@@ -54,6 +54,11 @@ async def code_completion_stream(request: Request) -> ChatResponse:
     pass
 
 
+@app.get("/health")
+async def health():
+    return "api_running"
+
+
 def main():
     arg_parser = ArgumentParser()
     arg_parser.add_argument("--host", type=str, default="localhost")

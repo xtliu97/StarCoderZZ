@@ -1,8 +1,10 @@
+import { workspace } from "vscode";
 import { ExtensionContext, StatusBarAlignment, window } from "vscode";
 import { STATUS_BAR_COMMAND } from "../commandsHandler";
 import { FULL_BRAND_REPRESENTATION, STATUS_NAME } from "../globals/consts";
-import StatusBarData from "./StatusBarData";
+import StatusBarData, { getStatusBarBackgroundColor, getStatusBarText } from "./StatusBarData";
 import StatusBarPromotionItem from "./StatusBarPromotionItem";
+
 
 const SPINNER = "$(sync~spin)";
 
@@ -14,7 +16,7 @@ export function registerStatusBar(context: ExtensionContext): void {
     return;
   }
 
-  const statusBar = window.createStatusBarItem(StatusBarAlignment.Left, -1);
+  const statusBar = window.createStatusBarItem(StatusBarAlignment.Right, -1);
   promotion = new StatusBarPromotionItem(
     window.createStatusBarItem(StatusBarAlignment.Left, -1)
   );
@@ -49,7 +51,8 @@ export function setDefaultStatus(): void {
   }
 
   statusBarData.icon = null;
-  statusBarData.text = FULL_BRAND_REPRESENTATION;
+  statusBarData.text = `${FULL_BRAND_REPRESENTATION}`;//getStatusBarText();
+  statusBarData.backgroundColor = getStatusBarBackgroundColor();
 }
 
 export function resetDefaultStatus(id?: string): void {
@@ -66,6 +69,7 @@ export function setLoadingStatus(issue?: string | undefined | null): void {
 
   statusBarData.text = issue;
   statusBarData.icon = SPINNER;
+  statusBarData.backgroundColor = getStatusBarBackgroundColor();
 }
 
 export function setPromotionStatus(
@@ -81,9 +85,8 @@ export function setPromotionStatus(
   promotion.id = id;
   promotion.item.text = message;
   promotion.item.command = command;
-  promotion.item.tooltip = `${FULL_BRAND_REPRESENTATION}${
-    tooltip ? ` - ${tooltip}` : ""
-  }`;
+  promotion.item.tooltip = `${FULL_BRAND_REPRESENTATION}${tooltip ? ` - ${tooltip}` : ""
+    }`;
   promotion.item.color = "white";
   statusBarData.text = " ";
   promotion.item.show();

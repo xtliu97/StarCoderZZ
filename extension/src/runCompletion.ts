@@ -6,8 +6,10 @@ import { AutocompleteResult, ResultEntry } from "./binary/requests/requests";
 import { CHAR_LIMIT, FULL_BRAND_REPRESENTATION } from "./globals/consts";
 import languages from "./globals/languages";
 import { setDefaultStatus, setLoadingStatus } from "./statusBar/statusBar";
+import { setServerAlive } from "./statusBar/StatusBarData";
 import { logInput, logOutput } from "./outputChannels";
 // import { getTabnineExtensionContext } from "./globals/tabnineExtensionContext";
+import Config from "./workspaceConfig";
 
 export type CompletionType = "normal" | "snippet";
 
@@ -21,7 +23,6 @@ export default async function runCompletion(
   timeout?: number,
   currentSuggestionText = ""
 ): Promise<AutocompleteResult | null | undefined> {
-  setLoadingStatus(FULL_BRAND_REPRESENTATION);
   const offset = document.offsetAt(position);
   const beforeStartOffset = Math.max(0, offset - CHAR_LIMIT);
   const afterEndOffset = offset + CHAR_LIMIT;
@@ -30,18 +31,6 @@ export default async function runCompletion(
   const prefix = document.getText(new Range(beforeStart, position)) + currentSuggestionText;
   const suffix = document.getText(new Range(position, afterEnd));
 
-  type Config = WorkspaceConfiguration & {
-    enbale: boolean;
-    modelIdOrEndpoint: string;
-    isFillMode: boolean;
-    startToken: string;
-    middleToken: string;
-    endToken: string;
-    stopToken: string;
-    temperature: number;
-    maxTimeOut: number;
-    maxNewTokens: number;
-  };
   const config: Config = workspace.getConfiguration("StarCoderZZ") as Config;
   const { enbale, modelIdOrEndpoint, startToken, middleToken, endToken, stopToken, temperature, maxTimeOut, maxNewTokens } = config;
 
@@ -52,6 +41,7 @@ export default async function runCompletion(
     setDefaultStatus();
     return null;
   }
+
 
   let endpoint = '';
   try {
@@ -80,6 +70,37 @@ export default async function runCompletion(
     }
   }
 
+  // check if endpoint is valid
+  try {
+    const serverHealthEndpoint = `${endpoint}/health`;
+    const healthRes = await fetch(serverHealthEndpoint, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "",
+      },
+    });
+    if (!healthRes.ok) {
+      // update serverAlive to false
+      logInput("Server is  not alive");
+      setDefaultStatus();
+      console.error("Error sending a request", healthRes.status, healthRes.statusText);
+      setServerAlive(false);
+      return null;
+    }
+  }
+  catch (e) {
+    logInput("Server is not alive");
+    setDefaultStatus();
+    console.error("Error sending a request", e);
+    setServerAlive(false);
+    return null;
+  }
+
+  // update serverAlive to true
+  setServerAlive(true);
+
+  setLoadingStatus(FULL_BRAND_REPRESENTATION);
 
   // use FIM (fill-in-middle) mode if suffix is available
   const inputs = suffix.trim() ? `${startToken}${prefix}${endToken}${suffix}${middleToken}` : prefix;
